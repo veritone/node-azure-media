@@ -61,6 +61,9 @@ function AzureAPI(config) {
                 followRedirect: false, 
                 strictSSL: true
             }, function (err, res) {
+				if (err) {
+					return cb(err);
+				}
                 if (res.statusCode === 301) {
                     this.config.base_url = res.headers.location;
                     console.log("changing base url to",  this.config.base_url);
@@ -137,7 +140,11 @@ function AzureAPI(config) {
             followRedirect: false, 
             strictSSL: true
         }, function (err, res) {
-            if (res.statusCode == 200) {
+			if (err) {
+				return cb(err);
+			}
+
+            if (res.statusCode === 200) {
                 var data = JSON.parse(res.body).d;
                 var dobj = models[model].create(data);
                 cb(err, dobj);
@@ -157,8 +164,12 @@ function AzureAPI(config) {
             strictSSL: true,
             qs: query
         }, function (err, res) {
+			if (err) {
+				return cb(err);
+			}
+
             var objs = [];
-            if (res.statusCode == 200) {
+            if (res.statusCode === 200) {
                 var data = JSON.parse(res.body).d.results;
                 data.forEach(function (rawd) {
                     var dobj = models[model].create(rawd);
@@ -187,7 +198,11 @@ function AzureAPI(config) {
             followRedirect: false,
             strictSSL: true
         }, function (err, res) {
-            if (res.statusCode == 201) {
+			if (err) {
+				return cb(err);
+			}
+
+            if (res.statusCode === 201) {
                 var data = JSON.parse(res.body).d;
                 var dobj = models[model].create(data);
                 cb(err, dobj);
@@ -207,7 +222,11 @@ function AzureAPI(config) {
             followRedirect: false, 
             strictSSL: true
         }, function (err, res) {
-            if (res.statusCode == 204) {
+			if (err) {
+				return cb(err);
+			}
+
+            if (res.statusCode === 204) {
                 cb(err);
             } else {
                 cb(err || 'Expected 204 status, received: ' + res.statusCode);
@@ -232,7 +251,11 @@ function AzureAPI(config) {
             strictSSL: true,
             body: JSON.stringify
         }, function (err, res) {
-            if (res.statusCode == 200) {
+			if (err) {
+				return cb(err);
+			}
+
+            if (res.statusCode === 200) {
                 var data = JSON.parse(res.body).d;
                 var dobj = models[model].create(data);
                 cb(err, dobj);
