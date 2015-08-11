@@ -249,7 +249,7 @@ function AzureAPI(config) {
             headers: this.defaultHeaders(),
             followRedirect: false,
             strictSSL: true,
-            body: JSON.stringify
+            body: JSON.stringify(data)
         }, function (err, res) {
 			if (err) {
 				return cb(err);
