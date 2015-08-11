@@ -23,30 +23,24 @@ var calls = {
         this.deleteRequest(modelName, id, cb);
     },
 
-	findOrCreate: function findOrCreateLocator(assetId, locatorType, accessPolicyId, startTime, cb) {
+	findOrCreate: function findOrCreateLocator(locator, cb) {
 		var self = this;
 		self.rest.locator.list(function(err, locators) {
 			if (err) {
 				return cb(err);
 			}
 
-			var locator;
+			var existingLocator;
 			locators.forEach(function(loc) {
-				if (loc.Type === locatorType && loc.AccessPolicyId === accessPolicyId && loc.AssetId === assetId) {
-					locator = loc;
+				if (loc.Type === locator.Type && loc.AccessPolicyId === locator.AccessPolicyId && loc.AssetId === locator.AssetId) {
+					existingLocator = loc;
 				}
 			});
 
-			if (locator) {
-				locator.StartTime = startTime;
-				self.rest.locator.update(locator.Id, locator, cb);
+			if (existingLocator) {
+				existingLocator.StartTime = startTime;
+				self.rest.locator.update(existingLocator.Id, existingLocator, cb);
 			} else {
-				locator = {
-					AccessPolicyId: accessPolicyId,
-					AssetId: assetId,
-					StartTime: startTime,
-					Type: locatorType
-				};
 				self.rest.locator.create(locator, cb);
 			}
 		});
