@@ -38,8 +38,10 @@ var calls = {
 			});
 
 			if (existingLocator) {
-				existingLocator.StartTime = locator.StartTime;
-				self.rest.locator.update(existingLocator.Id, existingLocator, cb);
+				var updatedLocator = existingLocator.toJSON();
+				updatedLocator.Id = undefined;
+				updatedLocator.StartTime = locator.StartTime;
+				self.rest.locator.update(existingLocator.Id, updatedLocator, cb);
 			} else {
 				self.rest.locator.create(locator, cb);
 			}
