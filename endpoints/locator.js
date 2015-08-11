@@ -38,7 +38,7 @@ var calls = {
 			});
 
 			if (existingLocator) {
-				existingLocator.StartTime = startTime;
+				existingLocator.StartTime = locator.StartTime;
 				self.rest.locator.update(existingLocator.Id, existingLocator, cb);
 			} else {
 				self.rest.locator.create(locator, cb);
