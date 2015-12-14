@@ -29,6 +29,9 @@ function AzureAPI(config) {
     if (!this.config.hasOwnProperty('oauth_url')) {
         this.config.oauth_url = "https://wamsprodglobal001acs.accesscontrol.windows.net/v2/OAuth2-13";
     }
+	if (!this.config.hasOwnProperty('scope')) {
+		this.config.scope = 'urn:WindowsAzureMediaServices';
+	}
     this.auth_token = config.auth_token || '';
     this.rest = {};
 
@@ -111,7 +114,7 @@ function AzureAPI(config) {
                 grant_type: 'client_credentials', 
                 client_id: this.config.client_id,
                 client_secret: this.config.client_secret,
-                scope: 'urn:WindowsAzureMediaServices'
+                scope: this.config.scope
             },
             strictSSL: true
         }, function (err, res) {
