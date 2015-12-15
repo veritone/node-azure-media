@@ -24,11 +24,11 @@ var resourceMap = {
 function AzureAPI(config) {
 	this.config = config || {};
 	this.config.base_url = this.config.base_url || 'https://media.windows.net/API/';
-	if (this.config.base_url[this.config.base_url.length] !== '/') {
+	if (this.config.base_url[this.config.base_url.length - 1] !== '/') {
 		this.config.base_url += '/';
 	}
-	this.config.oauth_url = (this.config.oauth_url || 'https://wamsprodglobal001acs.accesscontrol.windows.net/');
-	if (this.config.oauth_url[this.config.oauth_url.length] !== '/') {
+	this.config.oauth_url = this.config.oauth_url || 'https://wamsprodglobal001acs.accesscontrol.windows.net/';
+	if (this.config.oauth_url[this.config.oauth_url.length - 1] !== '/') {
 		this.config.oauth_url += '/';
 	}
 	this.config.oauth_url += 'v2/OAuth2-13';
