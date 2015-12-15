@@ -17,13 +17,17 @@ var Model = new Very.VeryModel({
     StartTime: {},
     State: {},
     TemplateId: {},
-    InputMediaAssets: {collection: odata, required: true},
+    InputMediaAssets: {static: true, collection: Asset},
     OutputMediaAssets: {static: true, collection: Asset},
     Tasks: {collection: Task},
     JobNotificationSubscriptions: {collection: JobNotificationSubscription},
 });
 
 Model.extendModel({
+    listInputMediaAssets: function (cb, query) {
+        this.api.rest.job.listInputMediaAssets(this.Id, cb, query);
+    },
+
     listOutputMediaAssets: function (cb, query) {
         this.api.rest.job.listOutputMediaAssets(this.Id, cb, query);
     },

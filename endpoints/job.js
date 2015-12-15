@@ -25,6 +25,30 @@ var calls = {
         this.deleteRequest(modelName, id, cb);
     },
 
+    listInputMediaAssets: function (id, cb, query) {
+        cb = cb || function () {};
+
+        request.get({
+            uri: this.modelURI('job', id) + '/InputMediaAssets',
+            headers: this.defaultHeaders(), 
+            followRedirect: false, 
+            strictSSL: true,
+            qs: query
+        }, function (err, res) {
+            var objs = [];
+            if (res.statusCode == 200) {
+                var data = JSON.parse(res.body).d.results;
+                data.forEach(function (rawd) {
+                    var dobj = models.asset.create(rawd);
+                    objs.push(dobj);
+                });
+                cb(err, objs);
+            } else {
+                cb(err || 'Expected 200 status, received: ' + res.statusCode);
+            }
+        });
+    },
+
     listOutputMediaAssets: function (id, cb, query) {
         cb = cb || function () {};
 
