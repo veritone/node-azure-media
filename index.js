@@ -22,59 +22,66 @@ var resourceMap = {
 
 
 function AzureAPI(config) {
-    this.config = config || {};
-    if (!this.config.hasOwnProperty('base_url')) {
-        this.config.base_url = "https://media.windows.net/API/";
-    }
-    if (!this.config.hasOwnProperty('oauth_url')) {
-        this.config.oauth_url = "https://wamsprodglobal001acs.accesscontrol.windows.net/v2/OAuth2-13";
-    }
-	if (!this.config.hasOwnProperty('scope')) {
-		this.config.scope = 'urn:WindowsAzureMediaServices';
+	this.config = config || {};
+	this.config.base_url = this.config.base_url || 'https://media.windows.net/API/';
+	if (this.config.base_url[this.config.base_url.length] !== '/') {
+		this.config.base_url += '/';
 	}
-    this.auth_token = config.auth_token || '';
-    this.rest = {};
+	this.config.oauth_url = (this.config.oauth_url || 'https://wamsprodglobal001acs.accesscontrol.windows.net/');
+	if (this.config.oauth_url[this.config.oauth_url.length] !== '/') {
+		this.config.oauth_url += '/';
+	}
+	this.config.oauth_url += 'v2/OAuth2-13';
+	this.config.scope = this.config.scope || 'urn:WindowsAzureMediaServices';
+	this.auth_token = this.config.auth_token || '';
+	this.rest = {};
 
-    this.media = new AzureMedia(this);
+	this.media = new AzureMedia(this);
 }
 
 (function () {
 
-    this.init = function (cb) {
-        Object.keys(endpoints).forEach(function (endpoint) {
-            this.rest[endpoint] = {};
-            Object.keys(endpoints[endpoint]).forEach(function (call) {
-                this.rest[endpoint][call] = function () {
-                    endpoints[endpoint][call].apply(this, arguments);
-                }.bind(this);
-            }.bind(this));
-        }.bind(this));
+	this.init = function (cb) {
+		Object.keys(endpoints).forEach(function (endpoint) {
+			this.rest[endpoint] = {};
+			Object.keys(endpoints[endpoint]).forEach(function (call) {
+				this.rest[endpoint][call] = function () {
+					endpoints[endpoint][call].apply(this, arguments);
+				}.bind(this);
+			}.bind(this));
+		}.bind(this));
 
-        Object.keys(models).forEach(function (model) {
-            if (model !== 'common') {
-                models[model].addModelVar('api', this);
-            }
-        }.bind(this));
+		Object.keys(models).forEach(function (model) {
+			if (model !== 'common') {
+				models[model].addModelVar('api', this);
+			}
+		}.bind(this));
 
-        this.getAuthToken(function (err, result) {
-            //get the first redirect
-            request.get({
-                uri: this.modelURI('asset'), 
-                headers: this.defaultHeaders(), 
-                followRedirect: false, 
-                strictSSL: true
-            }, function (err, res) {
+		this.getAuthToken(function (err, result) {
+			if (err) {
+				return cb(err);
+			}
+
+			//get the first redirect
+			request.get({
+				uri: this.modelURI('asset'),
+				headers: this.defaultHeaders(),
+				followRedirect: false,
+				strictSSL: true
+			}, function (err, res) {
 				if (err) {
 					return cb(err);
 				}
-                if (res.statusCode === 301) {
-                    this.config.base_url = res.headers.location;
-                    console.log("changing base url to",  this.config.base_url);
-                }
-                cb(err, result);
-            }.bind(this));
-        }.bind(this));
-    };
+
+				if (res.statusCode === 301) {
+					this.config.base_url = res.headers.location;
+					console.log("changing base url to",  this.config.base_url);
+				}
+
+				cb(err, result);
+			}.bind(this));
+		}.bind(this));
+	};
 
     this.defaultHeaders = function (opts) {
         var headers = {
@@ -105,34 +112,42 @@ function AzureAPI(config) {
         return url;
     };
 
-    this.getAuthToken = function (cb) {
-        cb = cb || function () {};
+	this.getAuthToken = function (cb) {
+		cb = cb || function () {};
 
-        request.post({
-            uri: this.config.oauth_url, 
-            form: {
-                grant_type: 'client_credentials', 
-                client_id: this.config.client_id,
-                client_secret: this.config.client_secret,
-                scope: this.config.scope
-            },
-            strictSSL: true
-        }, function (err, res) {
-            if (err) {
-                return cb(err);
-            }
+		var r = {
+			uri: this.config.oauth_url,
+			form: {
+				grant_type: 'client_credentials',
+				client_id: this.config.client_id,
+				client_secret: this.config.client_secret,
+				scope: this.config.scope
+			},
+			json: true,
+			strictSSL: true
+		};
+		if (this.config.debug) {
+			console.log('getAuthToken:request = ', r);
+		}
+		request.post(r, function (err, res, body) {
+			if (err) {
+				return cb(err);
+			}
 
-            var result = JSON.parse(res.body);
+			if (this.config.debug) {
+				console.log('getAuthToken:request.statusCode =', res.statusCode);
+				console.log('getAuthToken:request.body =', body);
+			}
 
-            if (result.error) {
-                return cb(result);
-            }
-            
-            this.oauth = result;
-            this.oauth.time_started = Date.now();
-            cb(err, result.access_token);
-        }.bind(this));
-    };
+			if (body.error) {
+				return cb(body);
+			}
+
+			this.oauth = body;
+			this.oauth.time_started = Date.now();
+			cb(undefined, body.access_token);
+		}.bind(this));
+	};
 
     this.getRequest = function (model, id, cb) {
         cb = cb || function () {};
