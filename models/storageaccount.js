@@ -1,7 +1,6 @@
-var Very = require('verymodel');
-var common = require('./common');
+var very = require('verymodel');
 
-module.exports = new Very.VeryModel({
-    Name: {static: true},
-    isDefault: {type: 'boolean'},
+module.exports = new very.VeryModel({
+	Name: {static: true},
+	isDefault: {type: 'boolean'}
 });

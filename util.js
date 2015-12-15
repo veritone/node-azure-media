@@ -1,5 +1,5 @@
-var config = require('./config');
-
-function mediaURL(args) {
-
-}
+//var config = require('./config');
+//
+//function mediaURL(args) {
+//
+//}

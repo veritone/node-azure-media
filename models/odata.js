@@ -1,6 +1,6 @@
-var Very = require('verymodel');
+var very = require('verymodel');
 var metadata = require('./odata_metadata');
 
-module.exports = new Very.VeryModel({
-    '__metadata': {model: metadata},
+module.exports = new very.VeryModel({
+	__metadata: {model: metadata}
 });
