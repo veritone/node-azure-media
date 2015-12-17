@@ -1,8 +1,7 @@
-var Very = require('verymodel');
-var common = require('./common');
+var very = require('verymodel');
 // http://msdn.microsoft.com/en-us/library/windowsazure/hh974308.aspx
 
-module.exports = new Very.VeryModel({
-    Code: {static: true},
-    Message: {static: true},
+module.exports = new very.VeryModel({
+	Code: {static: true},
+	Message: {static: true}
 });

@@ -3,23 +3,23 @@ var modelName = path.basename(module.filename, '.js');
 
 var calls = {
 
-    create: function (data, cb) {
-        this.createRequest(modelName, data, cb);
-    },
+	create: function create(data, cb) {
+		this.createRequest(modelName, data, cb);
+	},
 
-    get: function (id, cb) {
-        this.getRequest(modelName, id, cb);
-    },
+	get: function get(id, cb) {
+		this.getRequest(modelName, id, cb);
+	},
 
-    list: function (cb, query) {
-        this.listRequest(modelName, cb, query);
-    },
+	list: function list(cb, query) {
+		this.listRequest(modelName, cb, query);
+	},
 
-    update: function (id, data, cb) {
-        this.updateRequest(modelName, id, data, cb);
-    },
+	update: function update(id, data, cb) {
+		this.updateRequest(modelName, id, data, cb);
+	}
 
-    // asset files are deleted when their parent asset is deleted
+	// asset files are deleted when their parent asset is deleted
 
 };
 

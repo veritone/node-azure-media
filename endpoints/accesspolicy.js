@@ -3,33 +3,33 @@ var modelName = path.basename(module.filename, '.js');
 
 var calls = {
 
-    create: function (data, cb) {
-        this.createRequest(modelName, data, cb);
-    },
+	create: function create(data, cb) {
+		this.createRequest(modelName, data, cb);
+	},
 
-    get: function (id, cb) {
-        this.getRequest(modelName, id, cb);
-    },
+	get: function get(id, cb) {
+		this.getRequest(modelName, id, cb);
+	},
 
-    list: function (cb, query) {
-        this.listRequest(modelName, cb, query);
-    },
-    
-    //you can't update access policies, so omitted
+	list: function list(cb, query) {
+		this.listRequest(modelName, cb, query);
+	},
 
-    delete: function (id, cb) {
-        this.deleteRequest(modelName, id, cb);
-    },
+		//you can't update access policies, so omitted
 
-    findOrCreate: function (duration, permissions, cb) {
-        this.rest.accesspolicy.list(function (err, accesspolicies) {
-            if (!err && accesspolicies.length > 0) {
-                cb(err, accesspolicies[0]);
-            } else {
-                this.rest.accesspolicy.create({DurationInMinutes: duration, Permissions: permissions, Name: 'NodeAzureMedia_' + duration + '_' + permissions}, cb);
-            }
-        }.bind(this), {$filter: "Name eq 'NodeAzureMedia_" + duration + "_" + permissions + "'",  $orderby: 'Created desc', $top: 1});
-    },
+	delete: function delete_(id, cb) {
+		this.deleteRequest(modelName, id, cb);
+	},
+
+	findOrCreate: function findOrCreate(duration, permissions, cb) {
+		this.rest.accesspolicy.list(function listAccessPolicyCallback(err, accesspolicies) {
+			if (!err && accesspolicies.length > 0) {
+				cb(err, accesspolicies[0]);
+			} else {
+				this.rest.accesspolicy.create({DurationInMinutes: duration, Permissions: permissions, Name: 'NodeAzureMedia_' + duration + '_' + permissions}, cb);
+			}
+		}.bind(this), {$filter: 'Name eq \'NodeAzureMedia_' + duration + '_' + permissions + '\'',  $orderby: 'Created desc', $top: 1});
+	}
 
 };
 

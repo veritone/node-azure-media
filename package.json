@@ -15,5 +15,11 @@
     "request": "^2.34.0",
     "verymodel": "^1.10.1"
   },
-  "main": "index.js"
+  "main": "index.js",
+  "devDependencies": {
+    "gulp": "^3.9.0",
+    "gulp-debug": "^2.1.2",
+    "gulp-eslint": "^1.1.1",
+    "gulp-jasmine": "^2.2.1"
+  }
 }
