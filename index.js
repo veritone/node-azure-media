@@ -89,9 +89,11 @@ function AzureAPI(config) {
             DataServiceVersion: '3.0',
             MaxDataServiceVersion: '3.0',
             'x-ms-version': '2.2',
-            'Content-Type': 'application/json;odata=verbose',
-            Authorization: 'Bearer ' + this.oauth.access_token
+            'Content-Type': 'application/json;odata=verbose'
         };
+		if (this.oauth) {
+			headers.Authorization = 'Bearer ' + this.oauth.access_token;
+		}
         return headers;
     };
 
