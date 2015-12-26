@@ -97,9 +97,11 @@ AzureAPI.prototype.defaultHeaders = function defaultHeaders(/*opts*/) {
 		DataServiceVersion: '3.0',
 		MaxDataServiceVersion: '3.0',
 		'x-ms-version': '2.2',
-		'Content-Type': 'application/json;odata=verbose',
-		Authorization: 'Bearer ' + self.oauth.access_token
+		'Content-Type': 'application/json;odata=verbose'
 	};
+	if (self.oauth) {
+		headers.Authorization = 'Bearer ' + self.oauth.access_token;
+	}
 	return headers;
 };
 
