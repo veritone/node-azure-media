@@ -5,8 +5,6 @@ optimist.demand(['config']);
 var config = require(optimist.argv.config);
 
 var api = new AzureMedia(config.auth);
-api.init(function () {
-
-
-    repl.start({}).context.api = api;
+api.init(function initCallback() {
+	repl.start({}).context.api = api;
 });
