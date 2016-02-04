@@ -25,11 +25,11 @@ var calls = {
 		this.deleteRequest(modelName, id, cb);
 	},
 
-	listInputMedias: function listInputMedias(id, cb, query) {
+	listInputMediaAssets: function listInputMediaAssets(id, cb, query) {
 		//cb = cb || function () {};
 
 		request.get({
-			uri: this.modelURI('job', id) + '/InputMedias',
+			uri: this.modelURI('job', id) + '/InputMediaAssets',
 			headers: this.defaultHeaders(),
 			followRedirect: false,
 			strictSSL: true,
@@ -49,11 +49,11 @@ var calls = {
 		});
 	},
 
-	listOutputMedias: function listOutputMedias(id, cb, query) {
+	listOutputMediaAssets: function listOutputMediaAssets(id, cb, query) {
 		//cb = cb || function () {};
 
 		request.get({
-			uri: this.modelURI('job', id) + '/OutputMedias',
+			uri: this.modelURI('job', id) + '/OutputMediaAssets',
 			headers: this.defaultHeaders(),
 			followRedirect: false,
 			strictSSL: true,
