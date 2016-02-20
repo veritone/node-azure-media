@@ -73,6 +73,30 @@ var calls = {
 		});
 	},
 
+	listTasks: function listTasks(id, cb, query) {
+		//cb = cb || function () {};
+
+		request.get({
+			uri: this.modelURI('job', id) + '/Tasks',
+			headers: this.defaultHeaders(),
+			followRedirect: false,
+			strictSSL: true,
+			qs: query
+		}, function requestCallback(err, res) {
+			var objs = [];
+			if (res.statusCode == 200) {
+				var data = JSON.parse(res.body).d.results;
+				data.forEach(function forEachTask(rawd) {
+					var dobj = models.task.create(rawd);
+					objs.push(dobj);
+				});
+				cb(err, objs);
+			} else {
+				cb(err || 'Expected 200 status, received: ' + res.statusCode);
+			}
+		});
+	},
+
 	cancel: function cancel(id, cb) {
 		request.get({
 			uri: this.config.baseUrl + 'CancelJob',
